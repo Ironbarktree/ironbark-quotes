@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ironbark Quote Builder</title>
+<meta name="theme-color" content="#1e5631">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ironbark Quotes">
+<style>html,body{margin:0;padding:0;background:#f4f1ea}</style>
+</head>
+<body>
+<!--APP-START-->
+<div id="ib-app">
+<style>
+#ib-app{--g:#1e5631;--g2:#22a052;--b:#5a3d24;--bg:#f4f1ea;--card:#fff;--ln:#d9d3c7;--tx:#1d1d1b;--mu:#5f5a52;--red:#a3302b;--warn:#fff3cd;
+ font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--tx);background:var(--bg);max-width:820px;margin:0 auto;padding:0 12px 90px;box-sizing:border-box;font-size:16px;line-height:1.4}
+#ib-app *{box-sizing:border-box}
+#ib-app .hd{display:flex;align-items:center;gap:12px;background:var(--g);color:#fff;margin:0 -12px;padding:14px 16px;border-bottom:4px solid var(--b)}
+#ib-app .hd img{height:54px;width:auto;border-radius:6px;background:#fff;padding:2px}
+#ib-app .nm{font-weight:900;letter-spacing:.06em;font-size:1.45rem;line-height:1}
+#ib-app .nm small{display:block;font-size:.72rem;letter-spacing:.18em;font-weight:700;margin-top:3px;color:#d8e8d3}
+#ib-app .tag{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#cfe0c9;margin-top:3px}
+#ib-app .sync{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;justify-content:space-between;background:#e9f2e6;border-bottom:1px solid var(--ln);margin:0 -12px;padding:8px 14px;font-size:.85rem}
+#ib-app .sync.off{background:#fde9cf}
+#ib-app .sync.err{background:#f8d7d5}
+#ib-app .tabs{display:flex;gap:6px;margin:12px 0}
+#ib-app .tabs button{flex:1;background:#fff;color:var(--g);border:2px solid var(--g)}
+#ib-app .tabs button.on{background:var(--g);color:#fff}
+#ib-app .card{background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:10px 12px;margin:10px 0}
+#ib-app summary{cursor:pointer;font-weight:700;color:var(--b);font-size:1.02rem;padding:4px 0;list-style-position:outside}
+#ib-app label{display:block;font-size:.8rem;color:var(--mu);margin:9px 0 3px}
+#ib-app input,#ib-app select,#ib-app textarea{width:100%;padding:11px 10px;border:1px solid var(--ln);border-radius:8px;font-size:16px;background:#fff;color:var(--tx);font-family:inherit}
+#ib-app input[type=checkbox]{width:24px;height:24px;padding:0;flex:none}
+#ib-app .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#ib-app .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+#ib-app button{background:var(--g);color:#fff;border:0;border-radius:8px;min-height:46px;padding:10px 14px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit}
+#ib-app button:disabled{opacity:.5}
+#ib-app button.alt{background:var(--b)}
+#ib-app button.ghost{background:#fff;color:var(--g);border:2px solid var(--g)}
+#ib-app button.danger{background:var(--red)}
+#ib-app button.sm{min-height:34px;padding:5px 10px;font-size:.82rem}
+#ib-app button.x{background:var(--red);min-height:34px;padding:4px 11px}
+#ib-app .acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:12px 0}
+#ib-app .muted{color:var(--mu);font-size:.82rem}
+#ib-app .flag{color:var(--red);font-size:.78rem}
+#ib-app .pill{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.75rem;font-weight:700;background:#e6e1d6;color:var(--b);vertical-align:middle}
+#ib-app .pill.invoiced{background:#dce9f7;color:#1d4f87}#ib-app .pill.paid{background:#d6f0dc;color:#1e5631}#ib-app .pill.lost{background:#f3d6d4;color:var(--red)}#ib-app .pill.sent,#ib-app .pill.accepted{background:#fbe8c4;color:#7a4a00}
+#ib-app .docbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:1.05rem}
+#ib-app .warn{background:var(--warn);border:1px solid #e0c36a;padding:9px;border-radius:8px;font-size:.88rem;margin:8px 0}
+#ib-app .stopw{background:#f8d7d5;border:1px solid #d99;padding:9px;border-radius:8px;font-size:.88rem;margin:8px 0}
+#ib-app .est{background:#f5f8f3;border:1px dashed #9bb89a;border-radius:8px;padding:9px;margin-top:10px;font-size:.88rem;font-family:ui-monospace,Consolas,monospace;white-space:pre-wrap}
+#ib-app .hz{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:.9rem}
+#ib-app .hz input[type=number]{width:72px;padding:6px}
+#ib-app .stop{color:var(--red);font-weight:700}
+#ib-app .ln{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border-bottom:1px solid var(--ln);padding:7px 0;font-size:.9rem}
+#ib-app .ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:8px}
+#ib-app .ph figure{margin:0;background:#fff;border:1px solid var(--ln);border-radius:8px;padding:4px;position:relative}
+#ib-app .ph img{width:100%;height:110px;object-fit:cover;border-radius:5px;display:block}
+#ib-app .ph input{font-size:14px;padding:6px;margin-top:4px}
+#ib-app .ph .x{position:absolute;top:6px;right:6px}
+#ib-app .ph .up{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.9);border-radius:99px;font-size:.7rem;padding:1px 7px}
+#ib-app .item{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:#fff;margin:6px 0;cursor:pointer}
+#ib-app .tbl{width:100%;border-collapse:collapse;font-size:.88rem}
+#ib-app .tbl td,#ib-app .tbl th{border-bottom:1px solid var(--ln);padding:5px 4px;text-align:left}
+#ib-app .tbl input{padding:6px;font-size:15px}
+#ib-app .seg{display:flex;gap:6px;margin:6px 0}
+#ib-app .seg button{flex:1;min-height:38px;background:#fff;color:var(--g);border:2px solid var(--g)}
+#ib-app .seg button.on{background:var(--g);color:#fff}
+#ib-app .ibd{font-size:.92rem}
+@media(max-width:560px){#ib-app .row,#ib-app .row3{grid-template-columns:1fr}}
+</style>
+<style id="ibDocCss">
+.ibd{font-family:Arial,Helvetica,sans-serif;color:#1d1d1b;font-size:13px}
+.ibd table{width:100%;border-collapse:collapse}
+.ibd .hdr td{vertical-align:top;border:0;padding:0}
+.ibd .co{font-size:20px;font-weight:900;color:#1e5631;letter-spacing:.04em}
+.ibd .sm{font-size:11px;color:#555;line-height:1.45}
+.ibd .ttl{font-size:24px;font-weight:900;color:#5a3d24;text-align:right;letter-spacing:.08em}
+.ibd .r{text-align:right}
+.ibd .logo{height:64px;margin-bottom:4px}
+.ibd .bill{margin:14px 0 8px;padding:8px 10px;background:#f4f1ea;border-left:4px solid #1e5631}
+.ibd .li th{background:#1e5631;color:#fff;text-align:left;padding:6px;font-size:12px}
+.ibd .li td{border-bottom:1px solid #ddd;padding:6px;vertical-align:top}
+.ibd .li .n{text-align:right;white-space:nowrap}
+.ibd .tot td{padding:4px 6px;border:0}
+.ibd .tot .big td{font-size:16px;font-weight:900;border-top:2px solid #1e5631}
+.ibd .due td{font-size:16px;font-weight:900;color:#a3302b}
+.ibd .paid{display:inline-block;border:3px solid #1e5631;color:#1e5631;font-weight:900;font-size:22px;padding:2px 14px;transform:rotate(-6deg);margin:8px 0}
+.ibd .ft{margin-top:14px;font-size:11px;color:#555;border-top:1px solid #ddd;padding-top:8px}
+.ibd h4{margin:12px 0 4px;color:#5a3d24;font-size:13px}
+</style>
+
+<div class="hd"><img id="logoImg" alt="Ironbark Tree Co logo" hidden><div><div class="nm">IRONBARK<small>TREE CO. LLC</small></div><div class="tag">Professional tree care. Rooted in integrity.</div></div></div>
+<div id="syncBar" class="sync"><span id="syncTxt">Loading…</span><button id="syncBtn" class="sm">Sync now</button></div>
+<div class="tabs"><button data-tab="q" class="on">Quote</button><button data-tab="s">Saved</button><button data-tab="o">Settings</button></div>
+
+<!-- ============ QUOTE TAB ============ -->
+<section id="tab-q">
+ <div class="docbar"><b id="docName">New quote</b><span id="statusPill" class="pill">Draft</span><span id="qNum" class="muted"></span></div>
+ <div id="viewSeg" class="seg" hidden><button data-v="quote" class="on">Quote</button><button data-v="invoice">Invoice</button></div>
+
+ <details open class="card"><summary>Customer</summary>
+  <label>Existing client (optional, reuses their Drive folder)</label>
+  <select id="clientPick"><option value="">— New client —</option></select>
+  <div class="row">
+   <div><label>Name</label><input id="cName" autocomplete="off" placeholder="First Last"></div>
+   <div><label>Mobile phone (for text)</label><input id="cPhone" type="tel"></div>
+  </div>
+  <div class="row">
+   <div><label>Email</label><input id="cEmail" type="email"></div>
+   <div><label>Job address</label><input id="cAddr"></div>
+  </div>
+  <div id="folderInfo" class="muted" style="margin-top:8px"></div>
+ </details>
+
+ <details class="card"><summary>Tree estimator</summary>
+  <p class="flag">The hour formula is a starting placeholder with no source. Tune the numbers in Settings from your own job times.</p>
+  <div class="row">
+   <div><label>Job type</label><select id="eType"><option value="removal">Removal</option><option value="trim">Trim / prune</option></select></div>
+   <div><label>Wood</label><select id="eSp"><option value="soft">Softwood (willow, poplar, cottonwood, pine, spruce)</option><option value="hard">Hardwood (oak, maple, ash, locust, elm)</option></select></div>
+  </div>
+  <div class="row">
+   <div><label>Height (ft)</label><input id="eH" type="number" inputmode="decimal" min="0" value="25"></div>
+   <div><label>DBH (trunk diameter at 4.5 ft, inches)</label><input id="eD" type="number" inputmode="decimal" min="0" value="10"></div>
+  </div>
+  <label style="display:flex;gap:10px;align-items:center"><input id="eHaul" type="checkbox" checked> Include disposal / dump cost</label>
+  <div id="estOut" class="est"></div>
+  <div class="acts"><button id="estAdd">Add estimate as a line</button></div>
+ </details>
+
+ <details open class="card"><summary>Lines <span id="lnCount" class="muted"></span></summary>
+  <div id="lineList"></div>
+  <label>Service</label><select id="svc"></select>
+  <div class="row">
+   <div><label id="qtyLbl">Quantity</label><input id="qty" type="number" inputmode="decimal" min="0" step="0.5" value="1"></div>
+   <div><label>Price override ($, optional)</label><input id="ovr" type="number" inputmode="decimal" min="0" step="1"></div>
+  </div>
+  <label>Note (shown on quote)</label><input id="note">
+  <div class="acts"><button id="addBtn">Add line</button></div>
+ </details>
+
+ <details class="card"><summary>Job hazard analysis (JHA) <span id="hzCount" class="muted"></span></summary>
+  <p class="flag">The adjustment % values have no source. Set your defaults in Settings. This checklist is not a safety standard.</p>
+  <div id="hzList" class="hz"></div>
+  <label style="display:flex;gap:10px;align-items:center;margin-top:12px"><input id="hzApply" type="checkbox" checked> Add hazard adjustments to the price</label>
+  <div id="hzCtl" class="warn" hidden></div>
+ </details>
+
+ <details class="card"><summary>Job photos <span id="phCount" class="muted"></span></summary>
+  <label>Add photos (camera or library)</label>
+  <input id="phIn" type="file" accept="image/*" multiple>
+  <p class="muted">Photos save on this phone first, then upload to the client's Drive folder when you have signal.</p>
+  <div id="phList" class="ph"></div>
+ </details>
+
+ <details class="card"><summary>Notes</summary><textarea id="qNotes" rows="3" placeholder="Shown on the quote and invoice"></textarea></details>
+
+ <div id="invBox" class="card" hidden>
+  <b>Invoice details</b>
+  <div class="row">
+   <div><label>Invoice date</label><input id="iDate" type="date"></div>
+   <div><label>Due date</label><input id="iDue" type="date"></div>
+  </div>
+  <div class="row">
+   <div><label>Deposit / payments received ($)</label><input id="iPaid" type="number" inputmode="decimal" min="0" step="0.01"></div>
+   <div><label>Payment terms</label><input id="iTerms"></div>
+  </div>
+  <label style="display:flex;gap:10px;align-items:center"><input id="iPaidFull" type="checkbox"> Paid in full</label>
+ </div>
+
+ <div id="warns"></div>
+ <div class="card"><div id="preview"></div></div>
+
+ <div class="acts">
+  <button id="emailBtn">Email</button>
+  <button id="textBtn">Text</button>
+  <button id="shareBtn">Share + photos</button>
+  <button id="copyBtn" class="ghost">Copy text</button>
+  <button id="invBtn" class="alt">Convert to invoice</button>
+  <button id="lostBtn" class="ghost">Mark lost</button>
+  <button id="newBtn" class="alt">New quote</button>
+  <button id="delBtn" class="danger">Delete</button>
+ </div>
+</section>
+
+<!-- ============ SAVED TAB ============ -->
+<section id="tab-s" hidden>
+ <div class="row"><input id="sFind" placeholder="Search name, address, quote #"><button id="pullBtn" class="ghost">Pull from Drive</button></div>
+ <div class="seg" id="sFilter"><button data-f="" class="on">All</button><button data-f="open">Open</button><button data-f="invoiced">Unpaid</button><button data-f="paid">Paid</button></div>
+ <div id="sList"></div>
+</section>
+
+<!-- ============ SETTINGS TAB ============ -->
+<section id="tab-o" hidden>
+ <div class="card"><b>Rates</b>
+  <p class="flag">Starting values come from Ironbark_Pricing_Guide v4, Solo Operator tab. They are approximate placeholders.</p>
+  <div class="row3">
+   <div><label>Normal hourly ($)</label><input id="sRate" type="number"></div>
+   <div><label>Floor hourly ($)</label><input id="sFloor" type="number"></div>
+   <div><label>Minimum job ($)</label><input id="sMin" type="number"></div>
+   <div><label>Deposit %</label><input id="sDep" type="number"></div>
+   <div><label>Stump $/inch</label><input id="sInch" type="number" step="0.25"></div>
+   <div><label>Stump minimum ($)</label><input id="sInchMin" type="number"></div>
+   <div><label>Sales tax % <span class="flag">(verify)</span></label><input id="sTax" type="number" step="0.01"></div>
+   <div><label>Quote valid (days)</label><input id="sValid" type="number"></div>
+   <div><label>Invoice due in (days)</label><input id="sDueDays" type="number"></div>
+  </div>
+  <label>Invoice payment terms</label><input id="sTerms">
+ </div>
+ <div class="card"><b>Branding</b>
+  <label>Logo image URL (copy the image address of your logo from your Squarespace site)</label><input id="sLogo" placeholder="https://images.squarespace-cdn.com/...">
+ </div>
+ <div class="card"><b>Flat-price menu</b>
+  <table class="tbl" id="menuTbl"><thead><tr><th>Service</th><th>Price</th><th>Floor</th></tr></thead><tbody></tbody></table>
+ </div>
+ <div class="card"><b>Tree estimator formula</b>
+  <div class="muted">Hours = base + (per-ft × height) + (per-inch × DBH), × hardwood factor</div>
+  <table class="tbl"><tr><th></th><th>Base hrs</th><th>Hrs per ft</th><th>Hrs per inch</th></tr>
+   <tr><td>Removal</td><td><input id="eR0" type="number" step="0.01"></td><td><input id="eR1" type="number" step="0.001"></td><td><input id="eR2" type="number" step="0.001"></td></tr>
+   <tr><td>Trim</td><td><input id="eT0" type="number" step="0.01"></td><td><input id="eT1" type="number" step="0.001"></td><td><input id="eT2" type="number" step="0.001"></td></tr></table>
+  <div class="row3">
+   <div><label>Hardwood factor (×)</label><input id="eHard" type="number" step="0.05"></div>
+   <div><label>Disposal per job ($)</label><input id="eDisp" type="number"></div>
+   <div><label>Market check $/ft low</label><input id="eLo" type="number"></div>
+   <div><label>Market check $/ft high</label><input id="eHi" type="number"></div>
+   <div><label>Solo limit height (ft)</label><input id="eSoloH" type="number"></div>
+   <div><label>Solo limit DBH (in)</label><input id="eSoloD" type="number"></div>
+  </div>
+ </div>
+ <div class="card"><b>Default hazard adjustments (%)</b><div id="hzDefs" class="hz"></div></div>
+ <div class="card"><b>Google Drive sync</b>
+  <label>Apps Script web app URL</label><input id="sUrl" placeholder="https://script.google.com/macros/s/.../exec">
+  <label>Upload key (same as SECRET in the script)</label><input id="sKey" type="password">
+  <div class="acts"><button id="pushSet" class="ghost">Send settings to Drive</button><button id="pullSet" class="ghost">Get settings from Drive</button></div>
+  <p class="muted">Use "Send" on your phone after changing rates, then "Get" on Stephanie's phone so both quote the same prices.</p>
+ </div>
+ <div class="acts"><button id="saveSet">Save settings</button><button id="resetSet" class="ghost">Reset to defaults</button><button id="freeBtn" class="ghost">Free up space (remove uploaded photos)</button></div>
+ <p class="muted" id="storeInfo"></p>
+</section>
+
+<script>var IB_EMBED=false;</script>
+<script>
+(function(){
+'use strict';
+var root=document.getElementById('ib-app');
+function $(id){return root.querySelector('#'+id);}
+function $all(sel){return Array.prototype.slice.call(root.querySelectorAll(sel));}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function money(n){n=Math.round((+n||0)*100)/100;return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function r2(n){return Math.round((+n||0)*100)/100;}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function pad(n,l){n=String(n);while(n.length<l)n='0'+n;return n;}
+function isoDay(d){d=d||new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1,2)+'-'+pad(d.getDate(),2);}
+function addDays(iso,n){var d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+(+n||0));return isoDay(d);}
+function fmtDay(iso){if(!iso)return '';var p=iso.split('-');return p[1]+'/'+p[2]+'/'+p[0];}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+
+/* ---------- hazards ---------- */
+var HZ=[
+ {id:'pwr',n:'Power lines within 10 ft of tree or work zone',p:0,stop:1,c:'STOP: refer out to a line-clearance qualified arborist or call the utility. Do not work within the minimum approach distance.'},
+ {id:'svc',n:'Service drop (house power line) near tree',p:20,c:'Call the utility to drop or sleeve the line; keep limbs and tools clear.'},
+ {id:'bldg',n:'Tree over house, garage, or roof',p:25,c:'Rig and lower limbs; no free-falling over structures. Bring a second person.'},
+ {id:'fence',n:'Fence, shed, or landscaping in drop zone',p:10,c:'Piece down and lower; protect or remove panels first.'},
+ {id:'veh',n:'Vehicles, hardscape, or patio in drop zone',p:10,c:'Have the customer move vehicles; cover hardscape with mats or plywood.'},
+ {id:'acc',n:'Tight access, backyard, no equipment access',p:20,c:'Plan the hand-carry route; add time to carry brush to the street.'},
+ {id:'slope',n:'Slope or uneven ground',p:15,c:'Check footing and escape routes; never fell uphill toward yourself.'},
+ {id:'dead',n:'Dead, decayed, hollow, or cracked tree',p:25,c:'Do not climb compromised wood; plan for unpredictable failure.'},
+ {id:'lean',n:'Heavy lean or weight toward a target',p:15,c:'Use wedges or a pull line; confirm hinge and escape path.'},
+ {id:'storm',n:'Storm damage, hangers, or spring poles',p:25,c:'Release tension from a safe position; clear hangers first.'},
+ {id:'ins',n:'Bees, wasps, or other stinging insects',p:5,c:'Inspect first; treat or reschedule; carry an allergy plan.'},
+ {id:'poison',n:'Poison ivy, thorns, or irritant plants',p:5,c:'Long sleeves and gloves; wash gear afterward.'},
+ {id:'traffic',n:'Work near a street, sidewalk, or pedestrians',p:10,c:'Cones and signs; a spotter if people pass through the drop zone.'},
+ {id:'pets',n:'Pets, children, or bystanders on site',p:0,c:'Ask the customer to keep pets and kids inside during work.'},
+ {id:'ugu',n:'Stump grinding: underground utilities unknown',p:0,stop:1,c:'STOP: call Blue Stakes of Utah 811 and wait for marking before grinding.'},
+ {id:'rock',n:'Stump grinding: rocks, metal, or debris in stump',p:15,c:'Probe and clear around the stump; face shield and debris guard on.'},
+ {id:'wx',n:'High wind, ice, or extreme heat on job day',p:0,c:'Reschedule in high wind or lightning; hydrate and take breaks in heat.'}
+];
+
+/* ---------- settings ---------- */
+var DEF={rate:117,floor:103,min:200,dep:25,inch:5.5,inchMin:150,tax:0,valid:30,dueDays:0,
+ terms:'Balance due on completion of work. Cash, check, or card accepted.',logo:'',url:'',key:'',
+ est:{R0:0.5,R1:0.05,R2:0.08,T0:0.5,T1:0.04,T2:0.03,hard:1.2,disposal:60,mktLo:8,mktHi:15,soloH:25,soloD:18},
+ menu:[
+  {id:'rem',name:'Small tree removal (under ~25 ft, open ground)',price:371,floor:0,unit:'tree'},
+  {id:'trim',name:'Small tree trim / prune (25 ft or less)',price:200,floor:200,unit:'tree'},
+  {id:'stump',name:'Stump grinding (avg 12 in, batched day)',price:243,floor:243,unit:'stump'},
+  {id:'stumpadd',name:'Stump grind add-on (same day as removal)',price:159,floor:0,unit:'stump'},
+  {id:'brush',name:'Brush / storm debris cleanup with haul-off',price:276,floor:0,unit:'job'}
+ ],hz:{},updatedAt:0};
+HZ.forEach(function(z){DEF.hz[z.id]=z.p;});
+function loadS(){var o={};try{o=JSON.parse(lsGet('ibqb2_settings')||'{}')||{};}catch(e){o={};}
+ var s=Object.assign(clone(DEF),o);s.est=Object.assign(clone(DEF.est),o.est||{});s.hz=Object.assign(clone(DEF.hz),o.hz||{});
+ if(!Array.isArray(s.menu)||!s.menu.length)s.menu=clone(DEF.menu);return s;}
+var S=loadS();
+function saveS(){lsSet('ibqb2_settings',JSON.stringify(S));}
+
+/* ---------- storage (IndexedDB, memory fallback) ---------- */
+var DB=null,MEM={quotes:{},photos:{}};
+function openDB(){return new Promise(function(res){
+ if(!window.indexedDB)return res(null);
+ var r;try{r=indexedDB.open('ironbark-qb',1);}catch(e){return res(null);}
+ r.onupgradeneeded=function(){var d=r.result;if(!d.objectStoreNames.contains('quotes'))d.createObjectStore('quotes',{keyPath:'id'});
+  if(!d.objectStoreNames.contains('photos')){var p=d.createObjectStore('photos',{keyPath:'id'});p.createIndex('q','quoteId');}};
+ r.onsuccess=function(){res(r.result);};r.onerror=function(){res(null);};r.onblocked=function(){res(null);};});}
+function put(st,obj){if(!DB){MEM[st][obj.id]=obj;return Promise.resolve();}
+ return new Promise(function(res,rej){var t=DB.transaction(st,'readwrite');t.objectStore(st).put(obj);t.oncomplete=function(){res();};t.onerror=function(){rej(t.error);};});}
+function get(st,id){if(!DB)return Promise.resolve(MEM[st][id]||null);
+ return new Promise(function(res,rej){var q=DB.transaction(st,'readonly').objectStore(st).get(id);q.onsuccess=function(){res(q.result||null);};q.onerror=function(){rej(q.error);};});}
+function del(st,id){if(!DB){delete MEM[st][id];return Promise.resolve();}
+ return new Promise(function(res,rej){var t=DB.transaction(st,'readwrite');t.objectStore(st).delete(id);t.oncomplete=function(){res();};t.onerror=function(){rej(t.error);};});}
+function all(st){if(!DB)return Promise.resolve(Object.keys(MEM[st]).map(function(k){return MEM[st][k];}));
+ return new Promise(function(res,rej){var q=DB.transaction(st,'readonly').objectStore(st).getAll();q.onsuccess=function(){res(q.result||[]);};q.onerror=function(){rej(q.error);};});}
+function bySeq(a,b){return a.seq-b.seq;}
+
+/* ---------- quote model ---------- */
+var cur=null,curPhotos=[],view='quote',saveT=null,quoteCache=[];
+function last4(num){return String(num).replace(/\D/g,'').slice(-4);}
+var SUFFIX={jr:1,sr:1,ii:1,iii:1,iv:1};
+function lastName(name){var p=String(name||'').trim().split(/\s+/).filter(Boolean);
+ while(p.length>1&&SUFFIX[p[p.length-1].toLowerCase().replace(/\./g,'')])p.pop();
+ return (p[p.length-1]||'').replace(/[^A-Za-z'\-]/g,'')||'NoName';}
+function newNum(){var d=new Date(),ymd=String(d.getFullYear()).slice(2)+pad(d.getMonth()+1,2)+pad(d.getDate(),2),used={},n,i=0;
+ quoteCache.forEach(function(q){used[last4(q.num)]=1;});
+ do{n=pad(Math.floor(Math.random()*10000),4);i++;}while(used[n]&&i<100);return 'IB-'+ymd+'-'+n;}
+function blankQuote(){var q={id:uid(),num:newNum(),client:{name:'',phone:'',email:'',addr:''},lines:[],hz:{},hzApply:true,notes:'',status:'draft',invoice:null,
+ photoSeq:0,folder:'',doc:'',locked:false,fromClient:false,createdAt:Date.now(),updatedAt:Date.now(),dirty:false,synced:false,folderUrl:'',
+ rates:{min:S.min,dep:S.dep,tax:S.tax,valid:S.valid,hz:clone(S.hz)}};names(q);return q;}
+function names(q){if(q.locked)return;q.doc=lastName(q.client.name)+'-'+last4(q.num);if(!q.fromClient)q.folder=q.doc;}
+
+function calc(q){var R=q.rates,sub=0,warn=[];
+ q.lines.forEach(function(l){sub+=l.amt;if(l.floor&&l.amt<l.floor-0.005)warn.push(l.name+': '+money(l.amt)+' is below your floor of '+money(l.floor));});
+ var minAdj=(q.lines.length&&sub<R.min)?R.min-sub:0;
+ var sel=HZ.filter(function(z){return q.hz[z.id];}),hp=0;
+ sel.forEach(function(z){if(!z.stop)hp+=(+R.hz[z.id]||0);});
+ var hadj=(q.hzApply&&q.lines.length)?sub*hp/100:0;
+ var base=sub+minAdj+hadj,tax=base*(R.tax/100),total=base+tax,deposit=total*R.dep/100,paid=0;
+ if(q.invoice){paid=q.invoice.paidFull?total:(+q.invoice.paid||0);}
+ return {sub:sub,minAdj:minAdj,sel:sel,hp:hp,hadj:hadj,tax:tax,total:total,deposit:deposit,paid:paid,balance:Math.max(0,total-paid),warn:warn,
+  stops:sel.filter(function(z){return z.stop;})};}
+
+/* ---------- documents ---------- */
+function docBody(q,kind,caps){var c=calc(q),inv=kind==='invoice',I=q.invoice||{},h='';
+ h+='<div class="ibd"><table class="hdr"><tr><td>'+(S.logo?'<img class="logo" src="'+esc(S.logo)+'" alt="Ironbark logo"><br>':'')+
+  '<div class="co">IRONBARK TREE CO. LLC</div><div class="sm">Professional tree care. Rooted in integrity.<br>Utah County &middot; 801-694-3639<br>m.chavarria@ironbarktree.co &middot; www.ironbarktree.co</div></td>'+
+  '<td class="r"><div class="ttl">'+(inv?'INVOICE':'QUOTE')+'</div><div class="sm"><b>'+esc(inv?q.doc+'i':q.doc)+'</b><br>Ref '+esc(q.num)+'<br>'+
+  (inv?'Invoice date: '+esc(fmtDay(I.date))+(I.due?'<br>Due: '+esc(fmtDay(I.due)):''):'Date: '+esc(fmtDay(isoDay(new Date(q.createdAt))))+'<br>Valid '+esc(q.rates.valid)+' days')+'</div></td></tr></table>';
+ var cl=q.client;
+ h+='<div class="bill"><b>'+(inv?'Bill to':'Prepared for')+':</b> '+esc(cl.name||'—')+(cl.addr?'<br>Job site: '+esc(cl.addr):'')+((cl.phone||cl.email)?'<br>'+esc([cl.phone,cl.email].filter(Boolean).join(' · ')):'')+'</div>';
+ h+='<table class="li"><tr><th>Description</th><th class="n">Qty</th><th class="n">Amount</th></tr>';
+ if(!q.lines.length)h+='<tr><td colspan="3" style="color:#888">No lines yet</td></tr>';
+ q.lines.forEach(function(l){h+='<tr><td>'+esc(l.name)+'</td><td class="n">'+esc(l.qty+' '+l.unit)+'</td><td class="n">'+money(l.amt)+'</td></tr>';});
+ h+='</table><table class="tot"><tr><td class="r">Subtotal</td><td class="r" style="width:120px">'+money(c.sub)+'</td></tr>';
+ if(c.minAdj)h+='<tr><td class="r">Minimum job charge adjustment</td><td class="r">'+money(c.minAdj)+'</td></tr>';
+ if(c.hadj)h+='<tr><td class="r">Site conditions adjustment (+'+c.hp+'%)</td><td class="r">'+money(c.hadj)+'</td></tr>';
+ if(q.rates.tax)h+='<tr><td class="r">Tax ('+q.rates.tax+'%)</td><td class="r">'+money(c.tax)+'</td></tr>';
+ h+='<tr class="big"><td class="r">TOTAL</td><td class="r">'+money(c.total)+'</td></tr>';
+ if(inv){h+='<tr><td class="r">Payments received</td><td class="r">-'+money(c.paid)+'</td></tr><tr class="due"><td class="r">BALANCE DUE</td><td class="r">'+money(c.balance)+'</td></tr>';}
+ else h+='<tr><td class="r">Deposit to schedule ('+q.rates.dep+'%)</td><td class="r">'+money(c.deposit)+'</td></tr>';
+ h+='</table>';
+ if(inv&&c.balance<0.005&&c.total>0)h+='<div class="paid">PAID</div>';
+ if(c.sel.length)h+='<h4>Site conditions noted</h4><div class="sm">'+c.sel.map(function(z){return esc(z.n);}).join('; ')+'</div>';
+ if(q.notes)h+='<h4>Notes</h4><div class="sm">'+esc(q.notes).replace(/\n/g,'<br>')+'</div>';
+ if(caps&&caps.length)h+='<h4>Photos ('+caps.length+')</h4><div class="sm">'+caps.map(function(t,i){return (i+1)+'. '+esc(t||'(no caption)');}).join('<br>')+'</div>';
+ h+='<div class="ft">'+(inv?esc(I.terms||S.terms)+'<br>Thank you for your business.':'Quote valid '+esc(q.rates.valid)+' days. Price based on the scope above; hidden hazards, utility conflicts, or scope changes require a revised quote. To accept, reply to this message or call 801-694-3639.')+'</div></div>';
+ return h;}
+function docHtml(q,kind,caps){var css=(document.getElementById('ibDocCss')||{}).textContent||'';
+ return '<!doctype html><html><head><meta charset="utf-8"><style>body{margin:24px}'+css+'</style></head><body>'+docBody(q,kind,caps)+'</body></html>';}
+function docText(q,kind,short){var c=calc(q),inv=kind==='invoice',t='';
+ t+='Ironbark Tree Co LLC - '+(inv?'Invoice ':'Quote ')+(inv?q.doc+'i':q.doc)+'\n';
+ if(q.client.name)t+='For: '+q.client.name+'\n';if(q.client.addr)t+='Job: '+q.client.addr+'\n';t+='\n';
+ q.lines.forEach(function(l){t+='- '+l.name+' ('+l.qty+' '+l.unit+'): '+money(l.amt)+'\n';});
+ if(c.minAdj)t+='- Minimum job charge adjustment: '+money(c.minAdj)+'\n';
+ if(c.hadj)t+='- Site conditions adjustment (+'+c.hp+'%): '+money(c.hadj)+'\n';
+ if(q.rates.tax)t+='Tax ('+q.rates.tax+'%): '+money(c.tax)+'\n';
+ t+='\nTOTAL: '+money(c.total)+'\n';
+ if(inv)t+='Payments received: '+money(c.paid)+'\nBALANCE DUE: '+money(c.balance)+(q.invoice.due?' by '+fmtDay(q.invoice.due):'')+'\n';
+ else t+='Deposit to schedule ('+q.rates.dep+'%): '+money(c.deposit)+'\n';
+ if(!short&&c.sel.length)t+='\nSite conditions noted: '+c.sel.map(function(z){return z.n;}).join('; ')+'\n';
+ if(!short&&q.notes)t+='\nNotes: '+q.notes+'\n';
+ if(!short)t+='\n'+(inv?(q.invoice.terms||S.terms):'Quote valid '+q.rates.valid+' days. Price based on the scope above; hidden hazards, utility conflicts, or scope changes require a revised quote.')+'\n';
+ t+='\n'+(inv?'Thank you!':'Reply to accept.')+' Questions: 801-694-3639\nwww.ironbarktree.co';return t;}
+
+/* ---------- rendering ---------- */
+var PILL={draft:'Draft',sent:'Sent',accepted:'Accepted',invoiced:'Invoiced',paid:'Paid',lost:'Lost'};
+function opts(){var h='';S.menu.forEach(function(m){h+='<option value="m:'+esc(m.id)+'">'+esc(m.name)+' — '+money(m.price)+'/'+esc(m.unit)+'</option>';});
+ h+='<option value="inch">Stump grinding per inch of diameter — '+money(S.inch)+'/in</option>';
+ h+='<option value="hour">Hourly work (hedges, shrubs, misc) — '+money(S.rate)+'/hr</option>';
+ h+='<option value="custom">Custom line (enter price in override)</option>';$('svc').innerHTML=h;qtyLbl();}
+function qtyLbl(){var v=$('svc').value;$('qtyLbl').textContent=v==='inch'?'Total inches (sum of stump diameters)':v==='hour'?'Hours':'Quantity';}
+function renderAll(){if(!cur)return;
+ $('cName').value=cur.client.name;$('cPhone').value=cur.client.phone;$('cEmail').value=cur.client.email;$('cAddr').value=cur.client.addr;
+ $('qNotes').value=cur.notes;$('hzApply').checked=cur.hzApply;
+ if(cur.invoice){$('iDate').value=cur.invoice.date||'';$('iDue').value=cur.invoice.due||'';$('iPaid').value=cur.invoice.paid;$('iTerms').value=cur.invoice.terms||'';$('iPaidFull').checked=!!cur.invoice.paidFull;}
+ renderClients();renderHz();renderLines();renderPhotos();renderPreview();}
+function renderHead(){$('docName').textContent=cur.client.name?(view==='invoice'?cur.doc+'i':cur.doc):'New quote';
+ var p=$('statusPill');p.textContent=PILL[cur.status]||cur.status;p.className='pill '+cur.status;$('qNum').textContent=cur.num;
+ $('viewSeg').hidden=!cur.invoice;$all('#viewSeg button').forEach(function(b){b.classList.toggle('on',b.dataset.v===view);});
+ $('invBox').hidden=!(cur.invoice&&view==='invoice');
+ $('invBtn').textContent=cur.invoice?'View invoice':'Convert to invoice';
+ $('lostBtn').textContent=cur.status==='lost'?'Reopen':'Mark lost';
+ var fi=$('folderInfo');
+ if(!cur.client.name.trim())fi.innerHTML='Enter a name to set the Drive folder.';
+ else fi.innerHTML='Drive folder: <b>'+esc(cur.folder)+'</b> · quote file <b>'+esc(cur.doc)+'</b>'+(cur.invoice?' · invoice file <b>'+esc(cur.doc)+'i</b>':'')+
+  (cur.locked?(cur.folderUrl?' · <a href="'+esc(cur.folderUrl)+'" target="_blank" rel="noopener">open folder</a>':''):' <span class="muted">(name locks after the first upload)</span>');
+ $('clientPick').disabled=cur.locked;}
+function renderPreview(){renderHead();var c=calc(cur),w='';
+ if(c.stops.length)w+='<div class="stopw">'+c.stops.map(function(z){return '<b>'+esc(z.n)+'</b>: '+esc(z.c);}).join('<br>')+'</div>';
+ if(c.warn.length)w+='<div class="warn">Below your floor:<br>'+c.warn.map(esc).join('<br>')+'</div>';
+ $('warns').innerHTML=w;
+ $('preview').innerHTML=docBody(cur,view,curPhotos.map(function(p){return p.rec.cap;}));}
+function renderLines(){var h='';cur.lines.forEach(function(l,i){h+='<div class="ln"><span>'+esc(l.name)+' <span class="muted">('+esc(l.qty+' '+l.unit)+')</span></span><b>'+money(l.amt)+'</b><button class="x" data-li="'+i+'" aria-label="Remove line">×</button></div>';});
+ $('lineList').innerHTML=h;$('lnCount').textContent=cur.lines.length?'('+cur.lines.length+')':'';}
+function renderHz(){var h='';HZ.forEach(function(z){h+='<input type="checkbox" data-hz="'+z.id+'"'+(cur.hz[z.id]?' checked':'')+' aria-label="'+esc(z.n)+'"><span'+(z.stop?' class="stop"':'')+'>'+esc(z.n)+'</span>'+
+  (z.stop?'<span class="stop">STOP</span>':'<span><input type="number" data-hzp="'+z.id+'" value="'+esc(cur.rates.hz[z.id])+'" min="0" step="1" aria-label="percent">%</span>');});
+ $('hzList').innerHTML=h;renderHzCtl();}
+function renderHzCtl(){var sel=HZ.filter(function(z){return cur.hz[z.id];});$('hzCount').textContent=sel.length?'('+sel.length+' checked)':'';
+ var b=$('hzCtl');b.hidden=!sel.length;b.innerHTML='<b>Controls for this job:</b><br>'+sel.map(function(z){return '• '+esc(z.c);}).join('<br>');}
+function renderPhotos(){$('phList').innerHTML=curPhotos.map(function(p,i){return '<figure><img src="'+p.url+'" alt="Job photo '+(i+1)+'"><span class="up">'+(p.rec.uploaded?'✓ on Drive':'⏳ waiting')+'</span><button class="x" data-ph="'+i+'" aria-label="Remove photo">×</button><input data-cap="'+i+'" placeholder="Caption" value="'+esc(p.rec.cap)+'"></figure>';}).join('');
+ $('phCount').textContent=curPhotos.length?'('+curPhotos.length+')':'';}
+function renderClients(){var m={};quoteCache.forEach(function(q){if(q.client&&q.client.name&&q.folder&&q.id!==cur.id)m[q.folder]=q.client;});
+ var h='<option value="">— New client —</option>';Object.keys(m).sort().forEach(function(f){h+='<option value="'+esc(f)+'"'+(cur.fromClient&&cur.folder===f?' selected':'')+'>'+esc(m[f].name)+' — '+esc(f)+'</option>';});
+ $('clientPick').innerHTML=h;$('clientPick')._m=m;}
+
+/* ---------- changes & saving ---------- */
+function changed(full){cur.updatedAt=Date.now();cur.dirty=true;names(cur);if(full)renderAll();else renderPreview();
+ clearTimeout(saveT);saveT=setTimeout(saveCur,600);}
+function saveCur(){saveT=null;if(!cur)return Promise.resolve();
+ if(!cur.client.name.trim()&&!cur.lines.length&&!curPhotos.length)return Promise.resolve();
+ return put('quotes',clone(cur)).then(function(){var i=quoteCache.findIndex(function(q){return q.id===cur.id;});if(i<0)quoteCache.push(clone(cur));else quoteCache[i]=clone(cur);
+  lsSet('ibqb2_cur',cur.id);updateBar();scheduleSync();});}
+function flush(){if(saveT){clearTimeout(saveT);return saveCur();}return Promise.resolve();}
+
+function openQuote(q){curPhotos.forEach(function(p){URL.revokeObjectURL(p.url);});
+ cur=Object.assign(blankQuote(),clone(q));cur.rates=Object.assign({min:S.min,dep:S.dep,tax:S.tax,valid:S.valid,hz:clone(S.hz)},q.rates||{});
+ view=(cur.invoice&&cur.status!=='lost')?'invoice':'quote';lsSet('ibqb2_cur',cur.id);
+ return all('photos').then(function(ps){curPhotos=ps.filter(function(p){return p.quoteId===cur.id;}).sort(bySeq).map(function(p){return {rec:p,url:p.blob?URL.createObjectURL(p.blob):''};});renderAll();updateBar();});}
+function startNew(){return flush().then(function(){curPhotos.forEach(function(p){URL.revokeObjectURL(p.url);});curPhotos=[];cur=blankQuote();view='quote';renderAll();updateBar();});}
+
+/* ---------- estimator ---------- */
+function est(){var E=S.est,t=$('eType').value,h=+$('eH').value||0,d=+$('eD').value||0,hard=$('eSp').value==='hard',haul=$('eHaul').checked;
+ var a=t==='removal'?[E.R0,E.R1,E.R2]:[E.T0,E.T1,E.T2],raw=a[0]+a[1]*h+a[2]*d,hrs=hard?raw*E.hard:raw,disp=haul?+E.disposal:0;
+ return {t:t,h:h,d:d,hard:hard,haul:haul,a:a,raw:raw,hrs:hrs,disp:disp,price:Math.round(hrs*S.rate+disp),floor:Math.round(hrs*S.floor+disp),lo:h*E.mktLo,hi:h*E.mktHi,solo:(h>E.soloH||d>E.soloD)};}
+function renderEst(){var e=est(),s='';
+ s+='Hours = '+e.a[0]+' + '+e.a[1]+' × '+e.h+' ft + '+e.a[2]+' × '+e.d+' in = '+r2(e.raw)+'\n';
+ if(e.hard)s+='Hardwood: '+r2(e.raw)+' × '+S.est.hard+' = '+r2(e.hrs)+' hrs\n';
+ s+='Price = '+r2(e.hrs)+' hrs × '+money(S.rate)+(e.disp?' + '+money(e.disp)+' disposal':'')+' = '+money(e.price)+'\n';
+ s+='Floor = '+r2(e.hrs)+' hrs × '+money(S.floor)+(e.disp?' + '+money(e.disp):'')+' = '+money(e.floor)+'\n';
+ if(e.t==='removal')s+='Market check: '+e.h+' ft × $'+S.est.mktLo+'–$'+S.est.mktHi+'/ft = '+money(e.lo)+'–'+money(e.hi)+'\n  (one SLC company\'s per-foot rate, 2019, via ProMatcher; dated)\n';
+ s+='Hazard adjustments are added separately from the JHA.';
+ if(e.solo)s+='\n\n⚠ Over your solo limits ('+S.est.soloH+' ft / '+S.est.soloD+' in DBH): bring a second person or refer out.';
+ $('estOut').textContent=s;return e;}
+
+/* ---------- photos ---------- */
+function shrink(f){return new Promise(function(res){var img=new Image(),u=URL.createObjectURL(f);
+ img.onload=function(){var k=Math.min(1,1600/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+  c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){res(b||f);},'image/jpeg',0.82);};
+ img.onerror=function(){URL.revokeObjectURL(u);res(f);};img.src=u;});}
+function b64(blob){return new Promise(function(r,j){var fr=new FileReader();fr.onload=function(){r(String(fr.result).split(',')[1]);};fr.onerror=function(){j(fr.error);};fr.readAsDataURL(blob);});}
+
+/* ---------- sync ---------- */
+var syncing=false,lastSync=+lsGet('ibqb2_lastsync')||0,lastErr='',syncT=null,pending=0,noName=0;
+function scheduleSync(){clearTimeout(syncT);syncT=setTimeout(sync,4000);}
+function post(o){o.secret=S.key;var ctl=window.AbortController?new AbortController():null,t=ctl?setTimeout(function(){ctl.abort();},60000):null;
+ return fetch(S.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o),redirect:'follow',signal:ctl?ctl.signal:undefined})
+ .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+ .then(function(j){if(t)clearTimeout(t);if(!j||!j.ok)throw new Error((j&&j.error)||'Server error');return j;},function(e){if(t)clearTimeout(t);throw e;});}
+function countPending(){return Promise.all([all('quotes'),all('photos')]).then(function(a){var qs=a[0],ps=a[1],by={};pending=0;noName=0;
+ qs.forEach(function(q){by[q.id]=q;if(q.dirty){if(q.client&&q.client.name.trim())pending++;else noName++;}});
+ ps.forEach(function(p){if(!p.uploaded&&by[p.quoteId]&&by[p.quoteId].client.name.trim())pending++;});});}
+function updateBar(){return countPending().then(function(){var b=$('syncBar'),t;b.className='sync';
+ if(!S.url||!S.key)t='Drive sync not set up yet. Quotes save on this device (Settings → Google Drive).';
+ else if(!navigator.onLine){b.className='sync off';t='No signal. '+(pending?pending+' item(s) saved on this device and will upload when signal returns.':'Everything is saved on this device.');}
+ else if(syncing)t='Uploading to Drive…';
+ else if(lastErr){b.className='sync err';t='Upload problem: '+lastErr+'. Will retry.';}
+ else if(pending)t=pending+' item(s) waiting to upload.';
+ else t='All saved to Drive ✓'+(lastSync?' ('+new Date(lastSync).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+')':'');
+ if(noName)t+=' '+noName+' quote(s) need a customer name before upload.';
+ $('syncTxt').textContent=t;$('syncBtn').disabled=syncing||!S.url||!S.key;});}
+function sync(){if(syncing||!S.url||!S.key||!navigator.onLine){updateBar();return Promise.resolve();}
+ syncing=true;lastErr='';updateBar();
+ var run=flush().then(function(){return Promise.all([all('quotes'),all('photos')]);}).then(function(a){var qs=a[0],ps=a[1];
+  var chain=Promise.resolve();
+  qs.forEach(function(q){if(!q.dirty||!q.client.name.trim())return;
+   chain=chain.then(function(){var stamp=q.updatedAt,caps=ps.filter(function(p){return p.quoteId===q.id;}).sort(bySeq).map(function(p){return p.cap;});
+    var sendQ=clone(q);sendQ.locked=true;
+    return post({action:'saveQuote',quote:sendQ,quoteHtml:docHtml(q,'quote',caps),invoiceHtml:q.invoice?docHtml(q,'invoice',caps):null}).then(function(r){
+     return get('quotes',q.id).then(function(f){f=f||q;f.locked=true;f.synced=true;f.folderUrl=r.folderUrl||f.folderUrl;if(f.updatedAt===stamp)f.dirty=false;
+      if(cur&&cur.id===q.id){cur.locked=true;cur.synced=true;cur.folderUrl=f.folderUrl;if(cur.updatedAt===stamp)cur.dirty=false;}
+      return put('quotes',f);});});});});
+  return chain.then(function(){return all('quotes');}).then(function(qs2){var by={},c2=Promise.resolve();qs2.forEach(function(q){by[q.id]=q;});
+   ps.sort(bySeq).forEach(function(p){var q=by[p.quoteId];if(p.uploaded||!q||!q.synced||!p.blob)return;
+    c2=c2.then(function(){var name=q.doc+'-photo'+p.seq+'.jpg';return b64(p.blob).then(function(d){return post({action:'photo',folder:q.folder,client:q.client.name,filename:name,caption:p.cap,data:d});})
+     .then(function(){return get('photos',p.id).then(function(f){f=f||p;f.uploaded=true;f.name=name;var cp=curPhotos.find(function(x){return x.rec.id===p.id;});if(cp){cp.rec.uploaded=true;cp.rec.name=name;}return put('photos',f);});});});});
+   return c2;});
+ }).then(function(){lastSync=Date.now();lsSet('ibqb2_lastsync',String(lastSync));},function(e){lastErr=(e&&e.name==='AbortError')?'timed out':((e&&e.message)||String(e));});
+ return run.then(function(){syncing=false;return all('quotes');}).then(function(qs){quoteCache=qs;if(cur){renderHead();renderPhotos();}renderSaved();return updateBar();});}
+
+/* ---------- saved list ---------- */
+var sFilter='';
+function renderSaved(){var f=($('sFind').value||'').toLowerCase(),h='';
+ var list=quoteCache.slice().sort(function(a,b){return b.updatedAt-a.updatedAt;}).filter(function(q){
+  if(sFilter==='open'&&!(q.status==='draft'||q.status==='sent'||q.status==='accepted'))return false;
+  if(sFilter==='invoiced'&&q.status!=='invoiced')return false;if(sFilter==='paid'&&q.status!=='paid')return false;
+  if(!f)return true;return [q.client.name,q.client.addr,q.num,q.doc,q.client.phone].join(' ').toLowerCase().indexOf(f)>=0;});
+ list.forEach(function(q){var c=calc(q);h+='<div class="item" data-open="'+esc(q.id)+'"><b>'+esc(q.client.name||'(no name)')+'</b><span class="pill '+esc(q.status)+'">'+esc(PILL[q.status]||q.status)+'</span>'+
+  '<span class="muted">'+esc(q.invoice?q.doc+'i':q.doc)+' · '+esc(q.client.addr||'')+'</span><b>'+money(q.invoice&&q.status!=='paid'?c.balance:c.total)+'</b>'+
+  '<span class="muted">'+(q.dirty?'⏳ waiting to upload':'✓ on Drive')+' · '+esc(new Date(q.updatedAt).toLocaleDateString())+'</span></div>';});
+ $('sList').innerHTML=h||'<p class="muted">No saved quotes yet.</p>';}
+
+/* ---------- settings form ---------- */
+var SF={sRate:'rate',sFloor:'floor',sMin:'min',sDep:'dep',sInch:'inch',sInchMin:'inchMin',sTax:'tax',sValid:'valid',sDueDays:'dueDays'};
+var EF={eR0:'R0',eR1:'R1',eR2:'R2',eT0:'T0',eT1:'T1',eT2:'T2',eHard:'hard',eDisp:'disposal',eLo:'mktLo',eHi:'mktHi',eSoloH:'soloH',eSoloD:'soloD'};
+function fillSettings(){Object.keys(SF).forEach(function(k){$(k).value=S[SF[k]];});Object.keys(EF).forEach(function(k){$(k).value=S.est[EF[k]];});
+ $('sTerms').value=S.terms;$('sLogo').value=S.logo;$('sUrl').value=S.url;$('sKey').value=S.key;
+ $('menuTbl').querySelector('tbody').innerHTML=S.menu.map(function(m,i){return '<tr><td>'+esc(m.name)+'</td><td><input type="number" data-mk="price" data-mi="'+i+'" value="'+m.price+'"></td><td><input type="number" data-mk="floor" data-mi="'+i+'" value="'+m.floor+'"></td></tr>';}).join('');
+ $('hzDefs').innerHTML=HZ.filter(function(z){return !z.stop;}).map(function(z){return '<span></span><span>'+esc(z.n)+'</span><span><input type="number" data-hzd="'+z.id+'" value="'+S.hz[z.id]+'">%</span>';}).join('');
+ applyLogo();}
+function readSettings(){Object.keys(SF).forEach(function(k){S[SF[k]]=+$(k).value||0;});Object.keys(EF).forEach(function(k){S.est[EF[k]]=+$(k).value||0;});
+ S.terms=$('sTerms').value;S.logo=$('sLogo').value.trim();S.url=$('sUrl').value.trim();S.key=$('sKey').value;
+ $all('#menuTbl input').forEach(function(el){S.menu[+el.dataset.mi][el.dataset.mk]=+el.value||0;});
+ $all('#hzDefs input').forEach(function(el){S.hz[el.dataset.hzd]=+el.value||0;});S.updatedAt=Date.now();}
+function applyLogo(){var i=$('logoImg');if(S.logo){i.src=S.logo;i.hidden=false;i.onerror=function(){i.hidden=true;};}else i.hidden=true;}
+
+/* ---------- send helpers ---------- */
+function go(url){var a=document.createElement('a');a.href=url;a.target='_top';a.rel='noopener';root.appendChild(a);try{a.click();}catch(e){}a.remove();}
+function needLines(){if(!cur.lines.length){alert('Add at least one line first.');return false;}return true;}
+function markSent(){if(cur.status==='draft'){cur.status='sent';changed();}}
+function copyText(t){function fb(){var ta=document.createElement('textarea');ta.value=t;root.appendChild(ta);ta.select();try{document.execCommand('copy');alert('Copied. Paste it into a text or email.');}catch(e){alert(t);}ta.remove();}
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){alert('Copied. Paste it into a text or email.');},fb);else fb();}
+
+/* ---------- events ---------- */
+$all('.tabs button').forEach(function(b){b.addEventListener('click',function(){$all('.tabs button').forEach(function(x){x.classList.toggle('on',x===b);});
+ ['q','s','o'].forEach(function(t){$('tab-'+t).hidden=t!==b.dataset.tab;});if(b.dataset.tab==='s')renderSaved();if(b.dataset.tab==='o')fillSettings();window.scrollTo(0,0);});});
+$all('#viewSeg button').forEach(function(b){b.addEventListener('click',function(){view=b.dataset.v;renderPreview();});});
+[['cName','name'],['cPhone','phone'],['cEmail','email'],['cAddr','addr']].forEach(function(p){$(p[0]).addEventListener('input',function(){cur.client[p[1]]=this.value;changed();});});
+$('clientPick').addEventListener('change',function(){var f=this.value,m=this._m||{};
+ if(f&&m[f]){cur.client=Object.assign({},m[f]);cur.folder=f;cur.fromClient=true;}else{cur.fromClient=false;}changed(true);});
+$('qNotes').addEventListener('input',function(){cur.notes=this.value;changed();});
+$('svc').addEventListener('change',qtyLbl);
+$('addBtn').addEventListener('click',function(){var v=$('svc').value,q=parseFloat($('qty').value)||0,o=$('ovr').value,name,amt,floor=0,unit='';
+ if(v.indexOf('m:')===0){var m=S.menu.filter(function(x){return 'm:'+x.id===v;})[0];name=m.name;amt=m.price*q;floor=(m.floor||0)*q;unit=m.unit;}
+ else if(v==='inch'){name='Stump grinding (per inch)';amt=Math.max(S.inch*q,S.inchMin);unit='in';}
+ else if(v==='hour'){name='Hourly work';amt=S.rate*q;floor=S.floor*q;unit='hr';}
+ else{name='Custom';amt=0;unit='ea';}
+ if(o!=='')amt=parseFloat(o)||0;var n=$('note').value.trim();if(n)name+=' — '+n;
+ cur.lines.push({name:name,qty:q,unit:unit,amt:r2(amt),floor:r2(floor)});$('ovr').value='';$('note').value='';renderLines();changed();});
+$('lineList').addEventListener('click',function(e){var i=e.target.dataset.li;if(i!==undefined){cur.lines.splice(+i,1);renderLines();changed();}});
+['eType','eSp','eH','eD','eHaul'].forEach(function(id){$(id).addEventListener('input',renderEst);$(id).addEventListener('change',renderEst);});
+$('estAdd').addEventListener('click',function(){var e=renderEst();if(!e.h||!e.d){alert('Enter height and DBH first.');return;}
+ if(e.solo&&!confirm('This tree is over your solo limits. Add it anyway?'))return;
+ cur.lines.push({name:(e.t==='removal'?'Tree removal':'Tree trim / prune')+' — ~'+e.h+' ft, '+e.d+' in DBH, '+(e.hard?'hardwood':'softwood')+(e.haul?', debris hauled':''),qty:1,unit:'tree',amt:e.price,floor:e.floor});
+ renderLines();changed();});
+$('hzList').addEventListener('change',function(e){var t=e.target;if(t.dataset.hz){if(t.checked)cur.hz[t.dataset.hz]=true;else delete cur.hz[t.dataset.hz];renderHzCtl();changed();}});
+$('hzList').addEventListener('input',function(e){var t=e.target;if(t.dataset.hzp){cur.rates.hz[t.dataset.hzp]=+t.value||0;changed();}});
+$('hzApply').addEventListener('change',function(){cur.hzApply=this.checked;changed();});
+$('phIn').addEventListener('change',function(e){var files=[].slice.call(e.target.files||[]);e.target.value='';
+ Promise.all(files.map(shrink)).then(function(blobs){return Promise.all(blobs.map(function(b){var rec={id:uid(),quoteId:cur.id,seq:++cur.photoSeq,cap:'',blob:b,uploaded:false,name:''};
+  curPhotos.push({rec:rec,url:URL.createObjectURL(b)});return put('photos',rec);}));}).then(function(){renderPhotos();changed();})
+  .catch(function(err){alert('Could not save photo: '+err.message);});});
+$('phList').addEventListener('click',function(e){var i=e.target.dataset.ph;if(i===undefined)return;var p=curPhotos[+i];
+ if(p.rec.uploaded&&!confirm('This photo is already on Drive. Remove it from this device only?'))return;
+ URL.revokeObjectURL(p.url);curPhotos.splice(+i,1);del('photos',p.rec.id).then(function(){renderPhotos();changed();});});
+var capT=null;
+$('phList').addEventListener('input',function(e){var i=e.target.dataset.cap;if(i===undefined)return;var p=curPhotos[+i];p.rec.cap=e.target.value;
+ clearTimeout(capT);capT=setTimeout(function(){put('photos',p.rec);},500);changed();});
+['iDate','iDue','iPaid','iTerms','iPaidFull'].forEach(function(id){$(id).addEventListener('input',invEdit);$(id).addEventListener('change',invEdit);});
+function invEdit(){if(!cur.invoice)return;var I=cur.invoice;I.date=$('iDate').value;I.due=$('iDue').value;I.paid=+$('iPaid').value||0;I.terms=$('iTerms').value;I.paidFull=$('iPaidFull').checked;
+ var c=calc(cur);cur.status=c.balance<0.005&&c.total>0?'paid':'invoiced';changed();}
+$('invBtn').addEventListener('click',function(){if(cur.invoice){view='invoice';renderPreview();return;}
+ if(!needLines())return;if(!cur.client.name.trim()){alert('Enter the customer name first.');return;}
+ if(!confirm('Convert '+cur.doc+' to invoice '+cur.doc+'i?'))return;
+ var c=calc(cur),d=isoDay();cur.invoice={date:d,due:addDays(d,S.dueDays),paid:r2(c.deposit),terms:S.terms,paidFull:false};cur.status='invoiced';view='invoice';
+ changed(true);alert('Invoice created. "Payments received" is pre-filled with the '+cur.rates.dep+'% deposit ('+money(c.deposit)+'). Change it if the deposit was not collected.');});
+$('lostBtn').addEventListener('click',function(){cur.status=cur.status==='lost'?(cur.invoice?'invoiced':'draft'):'lost';changed();});
+$('newBtn').addEventListener('click',function(){startNew();window.scrollTo(0,0);});
+$('delBtn').addEventListener('click',function(){if(!confirm('Delete '+(cur.client.name?cur.doc:'this quote')+' from this device? Files already on Drive stay there.'))return;
+ var id=cur.id;Promise.all(curPhotos.map(function(p){return del('photos',p.rec.id);})).then(function(){return del('quotes',id);}).then(function(){quoteCache=quoteCache.filter(function(q){return q.id!==id;});return startNew();});});
+$('emailBtn').addEventListener('click',function(){if(!needLines())return;var subj='Your Ironbark Tree Co '+(view==='invoice'?'invoice '+cur.doc+'i':'quote '+cur.doc);
+ markSent();go('mailto:'+encodeURIComponent(cur.client.email.trim())+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(docText(cur,view,false)));});
+$('textBtn').addEventListener('click',function(){if(!needLines())return;var ph=cur.client.phone.replace(/[^\d+]/g,''),ios=/iPad|iPhone|iPod/.test(navigator.userAgent);
+ markSent();go('sms:'+ph+(ios?'&':'?')+'body='+encodeURIComponent(docText(cur,view,true)));});
+$('copyBtn').addEventListener('click',function(){if(!needLines())return;markSent();copyText(docText(cur,view,false));});
+$('shareBtn').addEventListener('click',function(){if(!needLines())return;var text=docText(cur,view,false);
+ var files=curPhotos.filter(function(p){return p.rec.blob;}).map(function(p){return new File([p.rec.blob],cur.doc+'-photo'+p.rec.seq+'.jpg',{type:'image/jpeg'});});
+ var data={title:'Ironbark Tree Co '+(view==='invoice'?cur.doc+'i':cur.doc),text:text};
+ if(files.length&&navigator.canShare&&navigator.canShare({files:files}))data.files=files;else if(files.length)alert('This browser cannot share photos; sharing text only.');
+ if(navigator.share){markSent();navigator.share(data).catch(function(err){if(err&&err.name!=='AbortError')alert('Share failed: '+err.message);});}
+ else alert('Sharing is not supported in this browser. Use Copy text.');});
+$('syncBtn').addEventListener('click',sync);
+$('sFind').addEventListener('input',renderSaved);
+$all('#sFilter button').forEach(function(b){b.addEventListener('click',function(){sFilter=b.dataset.f;$all('#sFilter button').forEach(function(x){x.classList.toggle('on',x===b);});renderSaved();});});
+$('sList').addEventListener('click',function(e){var el=e.target.closest('[data-open]');if(!el)return;var q=quoteCache.find(function(x){return x.id===el.dataset.open;});
+ if(q)flush().then(function(){return openQuote(q);}).then(function(){root.querySelector('.tabs button[data-tab="q"]').click();});});
+$('pullBtn').addEventListener('click',function(){if(!S.url||!S.key){alert('Set up Drive sync in Settings first.');return;}if(!navigator.onLine){alert('No signal right now.');return;}
+ var btn=this;btn.disabled=true;btn.textContent='Pulling…';
+ post({action:'list'}).then(function(r){var by={};quoteCache.forEach(function(q){by[q.id]=q;});var n=0,ch=Promise.resolve();
+  (r.quotes||[]).forEach(function(sq){var l=by[sq.id];if(!l||(!l.dirty&&sq.updatedAt>l.updatedAt)){sq.dirty=false;sq.synced=true;sq.locked=true;n++;ch=ch.then(function(){return put('quotes',sq);});}});
+  return ch.then(function(){return all('quotes');}).then(function(qs){quoteCache=qs;renderSaved();alert('Pulled '+n+' new or updated quote(s) from Drive. Photos stay in the Drive folders.');});})
+ .catch(function(e){alert('Pull failed: '+e.message);}).then(function(){btn.disabled=false;btn.textContent='Pull from Drive';});});
+$('saveSet').addEventListener('click',function(){readSettings();saveS();opts();applyLogo();renderEst();updateBar();sync();alert('Settings saved on this device. New quotes use them; existing quotes keep the rates they were made with.');});
+$('resetSet').addEventListener('click',function(){if(!confirm('Reset all rates to defaults? Drive URL and key are kept.'))return;var u=S.url,k=S.key,l=S.logo;S=clone(DEF);S.url=u;S.key=k;S.logo=l;saveS();fillSettings();opts();renderEst();});
+$('pushSet').addEventListener('click',function(){readSettings();saveS();var s=clone(S);delete s.url;delete s.key;
+ post({action:'putSettings',settings:s}).then(function(){alert('Settings sent to Drive.');},function(e){alert('Failed: '+e.message);});});
+$('pullSet').addEventListener('click',function(){post({action:'getSettings'}).then(function(r){if(!r.settings){alert('No settings saved on Drive yet.');return;}
+ var u=S.url,k=S.key;S=Object.assign(clone(DEF),r.settings);S.est=Object.assign(clone(DEF.est),r.settings.est||{});S.hz=Object.assign(clone(DEF.hz),r.settings.hz||{});S.url=u;S.key=k;
+ saveS();fillSettings();opts();renderEst();alert('Settings loaded from Drive.');},function(e){alert('Failed: '+e.message);});});
+$('freeBtn').addEventListener('click',function(){all('photos').then(function(ps){var up=ps.filter(function(p){return p.uploaded&&p.blob;});
+ if(!up.length){alert('No uploaded photos to remove.');return;}if(!confirm('Remove '+up.length+' photo(s) from this device? They stay on Drive.'))return;
+ return Promise.all(up.map(function(p){p.blob=null;return put('photos',p);})).then(function(){if(cur)return openQuote(cur);}).then(function(){alert('Done.');});});});
+window.addEventListener('online',function(){updateBar();sync();});window.addEventListener('offline',updateBar);
+document.addEventListener('visibilitychange',function(){if(document.hidden)flush();else sync();});
+window.addEventListener('pagehide',function(){flush();});
+
+/* ---------- start ---------- */
+openDB().then(function(db){DB=db;if(!DB)alert('This browser is blocking on-device storage (private mode?). Quotes will be lost if you close the page.');
+ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+ if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(function(e){$('storeInfo').textContent='Device storage used by this app: about '+Math.round((e.usage||0)/1048576)+' MB.';}).catch(function(){});
+ return all('quotes');}).then(function(qs){quoteCache=qs;opts();applyLogo();renderEst();
+ var last=lsGet('ibqb2_cur'),q=last&&qs.find(function(x){return x.id===last;});return q?openQuote(q):startNew();})
+.then(function(){sync();setInterval(sync,60000);});
+if(!window.IB_EMBED&&'serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(function(){});
+window.__ib={get cur(){return cur;},put:put,sync:sync,calc:calc,docText:docText,flush:flush,all:all,S:function(){return S;}};
+})();
+</script>
+</div>
+<!--APP-END-->
+</body>
+</html>
